@@ -40,6 +40,14 @@ public:
     double LengthSquared() const {
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
     }
+
+    static Vector3 Random() {
+        return Vector3(random_double(), random_double(), random_double());
+    }
+
+    static Vector3 Random(double min, double max) {
+        return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+    }
 };
 
 // point3 is just an alias for Vector3, but useful for geometric clarity in the code.
@@ -88,4 +96,24 @@ inline Vector3 Cross(const Vector3& u, const Vector3& v) {
 
 inline Vector3 UnitVector(const Vector3& v) {
     return v / v.Length();
+}
+
+inline Vector3 RandomInUnitSphere() {
+    while (true) {
+        auto p = Vector3::Random(-1, 1);
+        if (p.LengthSquared() < 1)
+            return p;
+    }
+}
+
+inline Vector3 RandomUnitVector() {
+    return UnitVector(RandomInUnitSphere());
+}
+
+inline Vector3 RandomOnHemisphere(const Vector3& normal) {
+    Vector3 onUnitSphere = RandomUnitVector();
+    if (Dot(onUnitSphere, normal) > 0.0) // In the same hemisphere as the normal
+        return onUnitSphere;
+    else
+        return -onUnitSphere;
 }

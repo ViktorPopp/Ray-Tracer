@@ -7,6 +7,7 @@ public:
     double  aspectRatio = 16.0 / 9.0;
     int     imageWidth = 400;
 	int     samplesPerPixel = 200;
+    int     maxDepth = 10;
 
     void Render(const Hittable& world) {
         Initialize();
@@ -19,7 +20,7 @@ public:
                 Color pixelColor(0, 0, 0);
                 for (int sample = 0; sample < samplesPerPixel; sample++) {
                     Ray r = GetRay(i, j);
-                    pixelColor += RayColor(r, world);
+                    pixelColor += RayColor(r, maxDepth, world);
                 }
                 WriteColor(std::cout, pixelSamplesScale * pixelColor);
             }
@@ -83,10 +84,16 @@ private:
         return Vector3(random_double() - 0.5, random_double() - 0.5, 0);
     }
 
-    Color RayColor(const Ray& r, const Hittable& world) const {
+    Color RayColor(const Ray& r, int depth, const Hittable& world) const {
+        // If we've exceeded the ray bounce limit, no more light is gathered.
+        if (depth <= 0)
+            return Color(0, 0, 0);
+
         HitRecord rec;
+
         if (world.Hit(r, Interval(0, infinity), rec)) {
-            return 0.5 * (rec.normal + Color(1, 1, 1));
+            Vector3 direction = RandomOnHemisphere(rec.normal);
+            return 0.5 * RayColor(Ray(rec.p, direction), depth - 1, world);
         }
 
         Vector3 unitDirection = UnitVector(r.GetDirection());
