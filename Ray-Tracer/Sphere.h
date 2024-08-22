@@ -6,7 +6,7 @@ class sphere : public Hittable {
 public:
     sphere(const Point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {}
 
-    bool Hit(const Ray& r, double ray_tmin, double ray_tmax, HitRecord& rec) const override {
+    bool Hit(const Ray& r, Interval ray_t, HitRecord& rec) const override {
         Vector3 oc = center - r.GetOrigin();
         auto a = r.GetDirection().LengthSquared();
         auto h = Dot(r.GetDirection(), oc);
@@ -20,9 +20,9 @@ public:
 
         // Find the nearest root that lies in the acceptable range.
         auto root = (h - sqrtd) / a;
-        if (root <= ray_tmin || ray_tmax <= root) {
+        if (!ray_t.surrounds(root)) {
             root = (h + sqrtd) / a;
-            if (root <= ray_tmin || ray_tmax <= root)
+            if (!ray_t.surrounds(root))
                 return false;
         }
 

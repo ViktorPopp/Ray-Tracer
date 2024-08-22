@@ -37,5 +37,8 @@
     <ClInclude Include="ray-tracer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Interval.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
