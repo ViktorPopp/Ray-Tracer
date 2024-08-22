@@ -91,8 +91,8 @@ private:
 
         HitRecord rec;
 
-        if (world.Hit(r, Interval(0, infinity), rec)) {
-            Vector3 direction = RandomOnHemisphere(rec.normal);
+        if (world.Hit(r, Interval(0.001, infinity), rec)) {
+            Vector3 direction = rec.normal + RandomUnitVector();
             return 0.5 * RayColor(Ray(rec.p, direction), depth - 1, world);
         }
 
