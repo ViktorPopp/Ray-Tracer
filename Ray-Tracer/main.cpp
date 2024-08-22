@@ -1,28 +1,12 @@
-#include <iostream>
-#include "Color.h"
-#include "Vector3.h"
-#include "Ray.h"
+#include "ray-tracer.h"
+#include "Hittable.h"
+#include "HittableList.h"
+#include "Sphere.h"
 
-double HitSphere(const Point3& center, double radius, const Ray& r) {
-    Vector3 oc = center - r.GetOrigin();
-    auto a = Dot(r.GetDirection(), r.GetDirection());
-    auto b = -2.0 * Dot(r.GetDirection(), oc);
-    auto c = Dot(oc, oc) - radius * radius;
-    auto discriminant = b * b - 4 * a * c;
-
-    if (discriminant < 0) {
-        return -1.0;
-    }
-    else {
-        return (-b - std::sqrt(discriminant)) / (2.0 * a);
-    }
-}
-
-Color RayColor(const Ray& r) {
-    auto t = HitSphere(Point3(0, 0, -1), 0.5, r);
-    if (t > 0.0) {
-        Vector3 N = UnitVector(r.At(t) - Vector3(0, 0, -1));
-        return 0.5 * Color(N.x() + 1, N.y() + 1, N.z() + 1);
+Color RayColor(const Ray& r, const Hittable& world) {
+    HitRecord rec;
+    if (world.Hit(r, 0, infinity, rec)) {
+        return 0.5 * (rec.normal + Color(1, 1, 1));
     }
 
     Vector3 unitDirection = UnitVector(r.GetDirection());
@@ -40,6 +24,12 @@ int main()
     // Calculate the image height, and ensure that it's at least 1.
     int imageHeight = int(imageWidth / aspectRatio);
     imageHeight = (imageHeight < 1) ? 1 : imageHeight;
+
+    /* World */
+	HittableList world;
+    world.Add(make_shared<sphere>(Point3(0, 0, -1), 0.5));
+    world.Add(make_shared<sphere>(Point3(0, -100.5, -1), 100));
+
 
     /* Camera */
     auto focalLength = 1.0;
@@ -59,6 +49,7 @@ int main()
     auto viewport_upper_left = cameraCenter - Vector3(0, 0, focalLength) - viewport_u / 2 - viewport_v / 2;
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixelDelta_u + pixelDelta_v);
 
+
 	/* Render */
     std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
 
@@ -69,7 +60,7 @@ int main()
             auto rayDirection = pixelCenter - cameraCenter;
             Ray ray(cameraCenter, rayDirection);
 
-            Color pixelColor = RayColor(ray);
+            Color pixelColor = RayColor(ray, world);
             WriteColor(std::cout, pixelColor);
         }
     }
