@@ -45,7 +45,7 @@ public:
 };
 
 // point3 is just an alias for Vector3, but useful for geometric clarity in the code.
-using point3 = Vector3;
+using Point3 = Vector3;
 
 // Vector Utility Functions
 inline std::ostream& operator<<(std::ostream& out, const Vector3& v) {
@@ -76,18 +76,18 @@ inline Vector3 operator/(const Vector3& v, double t) {
     return (1 / t) * v;
 }
 
-inline double dot(const Vector3& u, const Vector3& v) {
+inline double Dot(const Vector3& u, const Vector3& v) {
     return u.e[0] * v.e[0]
         + u.e[1] * v.e[1]
         + u.e[2] * v.e[2];
 }
 
-inline Vector3 cross(const Vector3& u, const Vector3& v) {
+inline Vector3 Cross(const Vector3& u, const Vector3& v) {
     return Vector3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
         u.e[2] * v.e[0] - u.e[0] * v.e[2],
         u.e[0] * v.e[1] - u.e[1] * v.e[0]);
 }
 
-inline Vector3 unit_vector(const Vector3& v) {
-    return v / v.length();
+inline Vector3 UnitVector(const Vector3& v) {
+    return v / v.Length();
 }

@@ -3,9 +3,9 @@
 #include "Vector3.h"
 #include <iostream>
 
-using color = Vector3;
+using Color = Vector3;
 
-void WriteColor(std::ostream& out, const color& pixel_color) {
+void WriteColor(std::ostream& out, const Color& pixel_color) {
     auto r = pixel_color.x();
     auto g = pixel_color.y();
     auto b = pixel_color.z();
