@@ -1,4 +1,4 @@
-## Project Founders
+## Project Founder
     Viktor Popp (ViktorPopp)
 
 ## Lead Developer
