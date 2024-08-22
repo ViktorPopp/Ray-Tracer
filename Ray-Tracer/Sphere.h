@@ -2,9 +2,9 @@
 
 #include "Hittable.h"
 
-class sphere : public Hittable {
+class Sphere : public Hittable {
 public:
-    sphere(const Point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {}
+    Sphere(const Point3& center, double radius) : center(center), radius(std::fmax(0, radius)) {}
 
     bool Hit(const Ray& r, Interval ray_t, HitRecord& rec) const override {
         Vector3 oc = center - r.GetOrigin();
