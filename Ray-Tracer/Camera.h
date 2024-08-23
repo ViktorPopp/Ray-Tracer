@@ -91,12 +91,9 @@ private:
 
         HitRecord rec;
 
-        if (world.Hit(r, Interval(0.001, infinity), rec)) {
-            Ray scattered;
-            Color attenuation;
-            if (rec.material->Scatter(r, rec, attenuation, scattered))
-                return attenuation * RayColor(scattered, depth - 1, world);
-            return Color(0, 0, 0);
+        if (world.Hit(r, Interval(0, infinity), rec)) {
+            Vector3 direction = RandomOnHemisphere(rec.normal);
+            return 0.5 * RayColor(Ray(rec.p, direction), depth - 1, world);
         }
 
         Vector3 unitDirection = UnitVector(r.GetDirection());
