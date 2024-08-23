@@ -41,6 +41,12 @@ public:
         return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];
     }
 
+    bool NearZero() const {
+        // Return true if the vector is close to zero in all dimensions.
+        auto s = 1e-8;
+        return (std::fabs(e[0]) < s) && (std::fabs(e[1]) < s) && (std::fabs(e[2]) < s);
+    }
+
     static Vector3 Random() {
         return Vector3(random_double(), random_double(), random_double());
     }
@@ -116,4 +122,8 @@ inline Vector3 RandomOnHemisphere(const Vector3& normal) {
         return onUnitSphere;
     else
         return -onUnitSphere;
+}
+
+inline Vector3 Reflect(const Vector3& v, const Vector3& n) {
+    return v - 2 * Dot(v, n) * n;
 }

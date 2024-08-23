@@ -145,6 +145,7 @@
     <ClInclude Include="Hittable.h" />
     <ClInclude Include="HittableList.h" />
     <ClInclude Include="Interval.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="ray-tracer.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Sphere.h" />
